@@ -4,6 +4,7 @@ library("ElemStatLearn")
 library("RWeka")
 #install.packages("FNN")
 library("FNN")
+setwd("/media/parik/New Volume/SDM/R Lab/HomeWork01")
 
 
 #############################################################
@@ -47,9 +48,11 @@ print(error.rate.knn)
 ##>> PLotting Error for k=1,3,5,7,9,11,13,15
 ##################################
 
-m=c(1:8)
-plot(m, error.rate.knn,type = "l" , main="Error rate Vs K",xlab = "K", ylab = "Error Rate")
 
+png("ErroRate_vs_Knn.png")
+m=c(1,3,5,7,9,11,13,15)
+plot(m, error.rate.knn,type = "l" , main="Error rate Vs K",xlab = "K", ylab = "Error Rate")
+dev.off()
 # 
 # #####USING MODEL TO PREDICT TEST DATA
 #prediction.knn2 <- predict(model.knn ,  zipTest, type = "class")
