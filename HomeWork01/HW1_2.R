@@ -20,21 +20,22 @@ summary <- summary(linear_model1)
 # -10.4049  -1.8142   0.0321   1.7865  13.9253 
 # 
 # Coefficients:
-#                 Estimate Std. Error t value Pr(>|t|)    
-# (Intercept)  -8.204304   4.418235  -1.857   0.0641 .  
-# cylinders    -0.689268   0.304391  -2.264   0.0241 *  
-#   displacement  0.014193   0.007136   1.989   0.0475 *  
-#   horsepower   -0.021568   0.012666  -1.703   0.0894 .  
-## weight       -0.005469   0.000607  -9.011  < 2e-16 ***
-#   acceleration -0.123369   0.095996  -1.285   0.1996    
-## year          0.665571   0.047868  13.904  < 2e-16 ***
-#   origin        1.440087   0.257512   5.592 4.38e-08 ***
+#                 Estimate   Std. Error  t value  Pr(>|t|)    
+# (Intercept)     -8.204304   4.418235  -1.857    0.0641 .  
+# cylinders      -0.689268   0.304391  -2.264    0.0241 *  
+#  displacement   0.014193   0.007136   1.989    0.0475 *  
+#   horsepower   -0.021568   0.012666  -1.703    0.0894 .  
+## weight        -0.005469   0.000607  -9.011   < 2e-16 ***
+#   acceleration  -0.123369   0.095996  -1.285    0.1996    
+## year           0.665571   0.047868   13.904   < 2e-16 ***
+#   origin        1.440087   0.257512   5.592  4.38e-08 ***
 #   ---
 #   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 # 
 # Residual standard error: 3.001 on 367 degrees of freedom
 # Multiple R-squared:  0.8419,	Adjusted R-squared:  0.8389 
 # F-statistic: 279.2 on 7 and 367 DF,  p-value: < 2.2e-16
+
 
 coef <- summary$coefficients
 
@@ -46,6 +47,12 @@ minPr <- which.min(coef[,"Pr(>|t|)"])
 maxPr <- which.max(coef[,"Pr(>|t|)"])
 ###Acceleration
 
+############################################################
+##>>>>>>>>>>>>>>>  YEAR
+
+
+linear_model2 <- lm(mpg ~ .-year, data=df)
+summary <- summary(linear_model2)
 
 
 ########################################################
@@ -53,13 +60,13 @@ maxPr <- which.max(coef[,"Pr(>|t|)"])
 #######################################################
 
 
-linear_model2 <- lm(mpg ~ cylinders+weight+horsepower+displacement+origin+year + (cylinders*displacement) + (cylinders*horsepower) +
+linear_model3 <- lm(mpg ~ cylinders+weight+horsepower+displacement+origin+year + (cylinders*displacement) + (cylinders*horsepower) +
                     (cylinders * weight) + (cylinders*origin) + (cylinders*year) + (displacement * horsepower)
                     + (displacement*weight) + (horsepower*weight) + (origin*cylinders) + (origin*displacement) + (origin*horsepower)
                     + (origin*weight) + (year*cylinders) + (year*weight) + (year*horsepower) + (year*displacement) + (year*origin)
                     + (year*horsepower), data=df)
 
-summary(linear_model2)
+summary(linear_model3)
 
 # Coefficients:
 #   Estimate Std. Error t value Pr(>|t|)    

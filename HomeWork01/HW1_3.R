@@ -34,7 +34,7 @@ k=1
 error.rate.knn=0
 
 for (i in seq(1,15,2)){
-  model.knn=knnCompute(zipTr, zipTest, zipTr$V1, i);
+ model.knn=knnCompute(zipTr, zipTest, zipTr$V1, i);
   model.knn <-as.data.frame(model.knn);
   knn<-model.knn$model.knn[1:364];
   error.rate.knn[k] <- sum(zipTest$V1!= knn)/nrow(zipTest);
