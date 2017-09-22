@@ -5,7 +5,7 @@ library("RWeka")
 #install.packages("FNN")
 library("FNN")
 setwd("/media/parik/New Volume/SDM/R Lab/HomeWork01")
-
+library("ggplot")
 
 #############################################################
 ##GETTING 2 AND 3 DIGIT'S DATA FROM THE ZIP TRAIN AND TEST DATABASES
@@ -31,18 +31,26 @@ knnCompute<- function(train, test, cl, k){
 }
 
 k=1
-error.rate.knn=0
+error.rate.knn.test=0
+error.rate.knn.tr = 0
 
 for (i in seq(1,15,2)){
- model.knn=knnCompute(zipTr, zipTest, zipTr$V1, i);
-  model.knn <-as.data.frame(model.knn);
-  knn<-model.knn$model.knn[1:364];
-  error.rate.knn[k] <- sum(zipTest$V1!= knn)/nrow(zipTest);
-  print(paste0("Accuary (Precision): ", 1 - error.rate.knn));
+ model.knn.test<-knnCompute(zipTr, zipTest, zipTr$V1, i);
+ model.knn.tr<-knnCompute(zipTr, zipTr, zipTr$V1, i);
+ model.knn.test <-as.data.frame(model.knn.test);
+ model.knn.tr <-as.data.frame(model.knn.tr);
+ 
+  knn.test<-model.knn.test$model.knn.test[1:364];
+  knn.tr<-model.knn.tr$model.knn.tr[1:1389]
+  
+  error.rate.knn.test[k] <- sum(zipTest$V1!= knn.test)/nrow(zipTest);
+  error.rate.knn.tr[k] <- sum(zipTr$V1!= knn.tr)/nrow(zipTr);
+  
+  #print(paste0("Accuary (Precision): ", 1 - error.rate.knn));
   k=k+1;
 }
-print(error.rate.knn)
-
+print(error.rate.knn.test)
+print(error.rate.knn.tr)
 
 ################################
 ##>> PLotting Error for k=1,3,5,7,9,11,13,15
@@ -51,7 +59,19 @@ print(error.rate.knn)
 
 png("ErroRate_vs_Knn.png")
 m=c(1,3,5,7,9,11,13,15)
-plot(m, error.rate.knn,type = "l" , main="Error rate Vs K",xlab = "K", ylab = "Error Rate")
+par(c(1,2,))
+p1<-plot(m, error.rate.knn.test,type = "l" , main="Error rate Vs K",xlab = "K", ylab = "Error Rate")
+p2 <- p1<-plot(m, error.rate.knn.tr,type = "l" , main="Error rate Vs K",xlab = "K", ylab = "Error Rate")
+
+dev.off()
+
+errors <- data.frame("K"=m, 
+                     "KNN.Train"=error.rate.knn.tr, 
+                     "KNN.Test"=error.rate.knn.test)
+
+plot.data <- melt(errors, id="K") 
+png("new.png")
+oo <-ggplot(data=errors, aes(x=K, y=KNN.Train, KNN.Test))                
 dev.off()
 # 
 # #####USING MODEL TO PREDICT TEST DATA
